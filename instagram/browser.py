@@ -175,7 +175,10 @@ class InstagramBrowser:
             return
         if self.halt_error or self.login_mode or response.status != 200:
             return
-        if 'json' in response.headers.get('content-type', ''):
+        content_type = response.headers.get('content-type', '').lower()
+        # Instagram also serves JSON responses as text/javascript. Parse only;
+        # never execute response bodies or replay their network requests.
+        if 'json' in content_type or 'javascript' in content_type:
             try:
                 payload = response.json()
             except Exception:
@@ -256,13 +259,16 @@ class InstagramBrowser:
         self.target, self.phase = username, 'profile'
         self.progress(f'Playwright: leyendo perfil @{username}...')
         self._navigate(f'/{username}/')
+        deadline = time.monotonic() + 10
+        while not self.profiles.get(username) and time.monotonic() < deadline:
+            self._wait(0.2)
         profile = self.profiles.get(username, {})
         header = self.page.locator('header').first
         if header.count():
             for kind, field in (('followers', 'follower_count'), ('following', 'following_count')):
                 if profile.get(field) is not None:
                     continue
-                link = header.locator(f'a[href$="/{kind}/"]').first
+                link = self._relationship_link(kind)
                 if link.count():
                     titles = link.locator('[title]').evaluate_all('(els) => els.map(el => el.title)')
                     texts = titles + [link.inner_text().split('\n')[0].split(' ')[0]]
@@ -272,6 +278,14 @@ class InstagramBrowser:
         profile.update({'username': username, 'link': f'{SITE}/{username}/', '_visited': True})
         self.profiles[username] = profile
         return dict(profile)
+
+    def _relationship_link(self, kind):
+        header = self.page.locator('header').first
+        # Current Instagram uses href="#" and an accessible count label.
+        label = re.compile(r'^\s*[\d,.\s]+(?:[KM]\s*)?' + kind + r'\s*$', re.I)
+        return header.locator(f'a[href$="/{kind}/"]').or_(
+            header.get_by_role('link', name=label)
+        ).first
 
     def _post_links(self):
         links = self.page.locator('main a[href]').evaluate_all('(els) => els.map(el => el.getAttribute("href"))')
@@ -362,7 +376,7 @@ class InstagramBrowser:
             expected = profile.get('follower_count' if kind == 'followers' else 'following_count')
             if expected == 0:
                 return collection_result([], 'users', complete=True)
-            self.page.locator(f'header a[href$="/{kind}/"]').first.click()
+            self._relationship_link(kind).click()
             self._wait()
             dialog = self.page.get_by_role('dialog').last
             dialog.wait_for(state='visible')

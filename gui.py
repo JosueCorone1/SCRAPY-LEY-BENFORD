@@ -136,7 +136,7 @@ class ExporterWindow:
         ).grid(row=0, column=0, sticky="w")
         ttk.Label(
             container,
-            text="Playwright con cookies de sesión · Análisis local · Usa perfiles que tengas autorización para analizar",
+            text="Instagram con cookies · Big Five con Gemini · Ley de Benford local",
         ).grid(row=1, column=0, sticky="w", pady=(3, 10))
 
         target = ttk.Frame(container)
@@ -198,6 +198,8 @@ class ExporterWindow:
             state="disabled",
         )
         self.open_button.pack(side="right")
+        self.reanalyze_button = ttk.Button(controls, text="Gemini: datos guardados", command=self._start_reanalysis)
+        self.reanalyze_button.pack(side="right", padx=8)
 
         self.result_notebook = ttk.Notebook(page)
         self.result_notebook.grid(row=1, column=0, sticky="nsew")
@@ -215,12 +217,14 @@ class ExporterWindow:
         )
         self.json_view.pack(fill="both", expand=True)
         self._set_text(self.summary,
-            "BIG FIVE · ANÁLISIS CON GEMINI\n\n"
+            "BIG FIVE · GOOGLE GEMINI\n\n"
             "1. Inicia sesión o configura tus cookies.\n"
-            "2. Escribe el perfil y pulsa Recopilar y analizar.\n"
-            "3. Revisa la estimación textual, la confianza y las observaciones de cada dimensión.\n\n"
-            "Configura GEMINI_API_KEY en .env. Se envían a Google la biografía y los textos de publicaciones y reels; "
-            "las puntuaciones son exploratorias y no constituyen una evaluación psicológica validada."
+            "2. Configura GEMINI_API_KEY en .env y reinicia el programa.\n"
+            "3. Escribe el perfil y pulsa Recopilar y analizar.\n"
+            "4. Revisa la biografía, los textos y la evidencia de cada dimensión.\n\n"
+            "Gemini recibe la biografía y los pies de publicaciones/reels; no se envían cookies, fotos ni videos. "
+            "La estimación es exploratoria, no una evaluación psicológica validada. "
+            "Usa Gemini: datos guardados para analizar una extracción existente sin volver a consultar Instagram."
         )
 
     def _build_benford_page(self):
@@ -352,6 +356,7 @@ class ExporterWindow:
     def _set_busy(self, busy):
         state = "disabled" if busy else "normal"
         self.start_button.configure(state=state)
+        self.reanalyze_button.configure(state=state)
         self.benford_scan_button.configure(state=state)
         self.login_button.configure(state=state)
         self.username_entry.configure(state=state)
@@ -373,6 +378,22 @@ class ExporterWindow:
     def _start_login(self):
         self._set_busy(True)
         threading.Thread(target=self._login_worker, daemon=True).start()
+
+    def _start_reanalysis(self):
+        handle = self.username.get().strip()
+        if not handle:
+            messagebox.showwarning('Falta el usuario', 'Escribe el @handle del informe guardado.', parent=self.root)
+            return
+        self._set_busy(True)
+        self.status.set('Analizando los textos guardados con Gemini...')
+        def worker():
+            try:
+                path = exporter.reanalyze_saved_report(handle)
+                report = json.loads(path.read_text(encoding='utf-8'))
+                self.events.put(('done', report, str(path)))
+            except Exception as exc:
+                self.events.put(('error', str(exc)))
+        threading.Thread(target=worker, daemon=True).start()
 
     def _login_worker(self):
         try:
@@ -514,10 +535,6 @@ class ExporterWindow:
             for file_path in (item.get("media_downloads") or {}).get("files", [])
         ]
         analysis = report.get("personality_analysis") or {}
-        analysis_method = (
-            "demostración sintética local" if analysis.get("provider") == "demo_synthetic"
-            else f"Gemini API ({analysis.get('model') or 'modelo no disponible'})"
-        )
 
         lines = [
             f"Perfil: @{profile.get('username') or report.get('target', '')}",
@@ -527,7 +544,8 @@ class ExporterWindow:
             f"Contenidos en el informe: {len(items)}; límite: {content.get('requested_limit') or 'todo lo disponible'}",
             f"Estado de recopilación: {report.get('status', 'no disponible')}",
             f"Archivos multimedia descargados: {len(media_paths)}",
-            f"Método Big Five: {analysis_method}",
+            f"Proveedor Big Five: {analysis.get('provider', 'no disponible')}; modelo: {analysis.get('model', 'no aplica')}",
+            f"Estado Big Five: {analysis.get('status', 'no disponible')}",
             f"Informe: {path}",
         ]
         collection = content.get("collection") or {}
@@ -539,35 +557,34 @@ class ExporterWindow:
                 lines.append(f"{label}: {details['error']}")
         result = analysis.get("result") or {}
         if result:
-            heading = "DEMOSTRACIÓN SINTÉTICA BIG FIVE" if analysis.get("provider") == "demo_synthetic" else "ANÁLISIS BIG FIVE CON GEMINI · ESTIMACIÓN TEXTUAL"
-            lines.append("\n" + heading)
-            if result.get("summary"):
-                lines.append(result["summary"])
-            if result.get("input_truncated"):
-                lines.append("Aviso: se omitió parte del texto por el límite de tamaño de Gemini.")
+            is_gemini = analysis.get('provider') == 'gemini'
+            lines.append("\nBIG FIVE · ESTIMACIÓN EXPLORATORIA" if is_gemini else "\nÍNDICES LÉXICOS · DEMOSTRACIÓN LOCAL")
             for key, label in TRAITS:
                 entry = result.get(key) or {}
                 score = entry.get("score")
-                score_text = f"estimación textual {score}/100" if score is not None else "evidencia insuficiente"
+                score_text = f"estimación {score}/100" if score is not None else "evidencia insuficiente"
                 justification = entry.get("justificacion") or ""
-                lines.append(f"• {label}: {score_text} (confianza {entry.get('confidence', 'baja')}). {justification}")
-                observations = entry.get("observations") or []
-                if observations:
-                    lines.append("  Observaciones: " + " · ".join(observations))
+                lines.append(f"• {label}: {score_text}. {justification}")
+                evidence = entry.get("evidence")
+                if isinstance(evidence, list):
+                    lines.append('  Confianza declarada por el modelo: ' + entry.get('confidence', 'no disponible'))
+                    for item in evidence:
+                        lines.append(f"  {item['source_id']}: {item['quote']}")
+                elif isinstance(evidence, dict):
+                    terms = list(evidence.get('positive') or {}) + list(evidence.get('opposite') or {})
+                    lines.append('  Términos encontrados: ' + (', '.join(terms) or 'ninguno'))
             if result.get("limitaciones"):
                 lines.append(f"Limitaciones: {result['limitaciones']}")
         elif analysis.get("error"):
+            interrupted = True
             lines.append(f"Detalle del análisis: {analysis['error']}")
 
         self._set_text(self.summary, "\n".join(lines))
         self._set_text(self.json_view, json.dumps(report, ensure_ascii=False, indent=2))
-        if analysis.get("status") == "failed":
-            self.status.set("Recopilación guardada; el análisis Gemini no se completó. Consulta el resumen.")
-        else:
-            self.status.set(
-                "Recopilación interrumpida; consulta el detalle en el resumen."
-                if interrupted else f"Proceso terminado. Estado: {report.get('status', 'desconocido')}."
-            )
+        self.status.set(
+            "Proceso con incidencias; consulta el estado de extracción y de Gemini en el resumen."
+            if interrupted else f"Proceso terminado. Estado: {report.get('status', 'desconocido')}."
+        )
         self._set_busy(False)
         self.open_button.configure(state="normal")
         self.mode_notebook.select(self.personality_page)

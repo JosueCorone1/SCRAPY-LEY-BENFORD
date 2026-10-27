@@ -7,6 +7,8 @@ services:
       - ./output:/app/output
       - ./.auth:/app/.auth
     environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-flash-latest}
       - INSTAGRAM_COOKIES=${INSTAGRAM_COOKIES:-}
       - PLAYWRIGHT_HEADLESS=true
       - INSTAGRAM_REQUEST_INTERVAL_SECONDS=${INSTAGRAM_REQUEST_INTERVAL_SECONDS:-2}

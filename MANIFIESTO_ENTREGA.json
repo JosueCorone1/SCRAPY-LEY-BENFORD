@@ -1,0 +1,463 @@
+{
+  "format": "sha256",
+  "files": {
+    "PerfilLab/.dockerignore": {
+      "sha256": "6fa60503af6d5ead469d61cfb34957117ba1a9afa951bdfbdb440c23c4714c45",
+      "bytes": 162
+    },
+    "PerfilLab/.env.example": {
+      "sha256": "c248a594c2b18e3ef75597ea427f43dc15466c84c4cdbd6bdc4555a4a935c19f",
+      "bytes": 334
+    },
+    "PerfilLab/.gitignore": {
+      "sha256": "793c09001c68a7afac78e72cfb7f9aff737fb937754d7dc2dc00f8a354ac23f4",
+      "bytes": 248
+    },
+    "PerfilLab/benford.py": {
+      "sha256": "adf77a2152f4b62435e457a4ad33d9e00762b3e532adb5f4afb64c309cad2d45",
+      "bytes": 5254
+    },
+    "PerfilLab/big_five.py": {
+      "sha256": "09b808bee43ffcade1900b579a93a4d13d4bfeab103626be2849ee03db779500",
+      "bytes": 4227
+    },
+    "PerfilLab/config.py": {
+      "sha256": "7692dff05935ed9b97a4c948b0047e3019fa194a624feaf7696c20ecd7dd69bd",
+      "bytes": 1601
+    },
+    "PerfilLab/demo_data.py": {
+      "sha256": "0dcc80e3e19aaeb002617aae9731c051cea9b9d4af57947d92d01673b01c3bb9",
+      "bytes": 1394
+    },
+    "PerfilLab/docker-compose.yaml": {
+      "sha256": "44277ab3f2d4360debb9555d2611c56b62efc09e1180d10dd41b38879022adbf",
+      "bytes": 525
+    },
+    "PerfilLab/Dockerfile": {
+      "sha256": "299c383298a435c05de10c3167bcc448da616297afa4095e04ca37a6be46c54f",
+      "bytes": 260
+    },
+    "PerfilLab/gemini_analysis.py": {
+      "sha256": "864a61d045317d42cc278625afb5df76fa779930d246fb7252431734e6fef7f5",
+      "bytes": 7052
+    },
+    "PerfilLab/gui.py": {
+      "sha256": "8072a4c03058c29b5c867fae640a64cc9a88a7e42f08283fd482a2bef1d76429",
+      "bytes": 33726
+    },
+    "PerfilLab/instagram/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "PerfilLab/instagram/browser.py": {
+      "sha256": "633baa798576356dad6007f808fc495d7bb45e1366946c93deb4b59f006abfdd",
+      "bytes": 21674
+    },
+    "PerfilLab/instagram/browser_data.py": {
+      "sha256": "f0a5d865fb5dbfdbb9e23dc0839bf0e3c89e4dcbbb932895565a9896320e99e9",
+      "bytes": 7721
+    },
+    "PerfilLab/instagram/errors.py": {
+      "sha256": "4f9e9a0ee617dd66058032d3bcc5c2e566807f96b123882c4fb36ce8989e5773",
+      "bytes": 292
+    },
+    "PerfilLab/instagram/fixtures/audio_page_meta.json": {
+      "sha256": "20068cd4cfb5d28594ae88f2820e779a225ea32e6917d6ba5c182480b6b1849f",
+      "bytes": 804
+    },
+    "PerfilLab/instagram/fixtures/ayml_instagram.json": {
+      "sha256": "76d9ceb127e55a2a3745a0fc2e64e41bfcd346c867b0d1ad4589b9398e123f2d",
+      "bytes": 2218
+    },
+    "PerfilLab/instagram/fixtures/clips_music.json": {
+      "sha256": "3c26ab0095df235ff8a43cd77abf1a3b43bd7bdff422efebb1cdebb2b1c2db16",
+      "bytes": 64418
+    },
+    "PerfilLab/instagram/fixtures/clips_music_missing.json": {
+      "sha256": "7161895a0efe3f1b2219d992a71572ce96f3fff87001aecbcd75210024cafee4",
+      "bytes": 118
+    },
+    "PerfilLab/instagram/fixtures/comments_page.json": {
+      "sha256": "14a40d10fbdbe3f4ffdc9e2ea1a55aedfe52eeb534e0ce64a9c7b2f6ec7c3d6a",
+      "bytes": 3845
+    },
+    "PerfilLab/instagram/fixtures/explore_home.json": {
+      "sha256": "47cb055ff10bb399cbe9e725712fdde324a0525e073f74fba2a1ef31d9625877",
+      "bytes": 60336
+    },
+    "PerfilLab/instagram/fixtures/explore_section_page.json": {
+      "sha256": "a96d8f63b1726a78f6d1d7dd0dc93b735e6fed400a1d20280af197fe78698da6",
+      "bytes": 2048
+    },
+    "PerfilLab/instagram/fixtures/highlight_items.json": {
+      "sha256": "02fce46581994693044100b6b949c30a6d48de35df4c634de2b2bd85e2415524",
+      "bytes": 27441
+    },
+    "PerfilLab/instagram/fixtures/location_page_relay.json": {
+      "sha256": "b4ae0ac01bece35d40d9c6fe7dcba8eab3ce5103c2739adf5132e1a44f7b565f",
+      "bytes": 26234
+    },
+    "PerfilLab/instagram/fixtures/location_tab_recent.json": {
+      "sha256": "87868d9b611bbac3949c985d3b0c4ca07cc2dad11051cd69fb277921b81306db",
+      "bytes": 33467
+    },
+    "PerfilLab/instagram/fixtures/mobile_clips_nike.json": {
+      "sha256": "96101c3060b94a9514bc07fe30a866bb2cf847c2ccc4d018a8d5fabf0aa79ab2",
+      "bytes": 55660
+    },
+    "PerfilLab/instagram/fixtures/mobile_feed_missing.json": {
+      "sha256": "b39e9801128d781a0369ee6614a67c29334dabe3a693196bd816ec224abc189e",
+      "bytes": 187
+    },
+    "PerfilLab/instagram/fixtures/mobile_feed_nike.json": {
+      "sha256": "de67f2e8a2b3b0c1cc9d79eaadff97bd39eaab2aed7bd0844fcbd94d64a4b0af",
+      "bytes": 94660
+    },
+    "PerfilLab/instagram/fixtures/oembed.json": {
+      "sha256": "1ac382c08948631a49784a00b7f0ceb258dee5ad75ead396c0d58e80bc1597d2",
+      "bytes": 8185
+    },
+    "PerfilLab/instagram/fixtures/popular_travel.json": {
+      "sha256": "d3fb8fa8219c6a814d37018df7fc1b1d8dafc19408f40947c7a750d12c48bcce",
+      "bytes": 17401
+    },
+    "PerfilLab/instagram/fixtures/post_loggedout_carousel.json": {
+      "sha256": "94bc26dfaa970297245507b5b9c2a1fcfe52a964a8f10d1d14fd71056879304a",
+      "bytes": 32041
+    },
+    "PerfilLab/instagram/fixtures/post_loggedout_gated.json": {
+      "sha256": "a0a9aff09e49575326cf430d7d3ac75dc8fb4f856f7ddffc839af7543abb8c13",
+      "bytes": 454
+    },
+    "PerfilLab/instagram/fixtures/post_loggedout_missing.json": {
+      "sha256": "ea2f015a4e424ae7c3a32be9fd930034ea100bad1b9e2aea1dcd79b65ae3bb2e",
+      "bytes": 30
+    },
+    "PerfilLab/instagram/fixtures/post_root_carousel.json": {
+      "sha256": "5bff2783642166ffbc6849ec487e3c1096f930b273aa7a6d4688bfa4af538e77",
+      "bytes": 42043
+    },
+    "PerfilLab/instagram/fixtures/post_root_reel.json": {
+      "sha256": "fbaf36080e2832a740de2731466d3939decbd59b191cfcdb1fc73973ce379e0f",
+      "bytes": 19589
+    },
+    "PerfilLab/instagram/fixtures/profile_page_content_nike.json": {
+      "sha256": "ce025053ab627563d5b3d0cd27edd55da57fd7af0cff2b2170b6f75fab89b46f",
+      "bytes": 3685
+    },
+    "PerfilLab/instagram/fixtures/profile_page_meta.json": {
+      "sha256": "0fb695d442481d75cf77297bb0fe018101c1889195f224025f9c00b0cc63bebf",
+      "bytes": 750
+    },
+    "PerfilLab/instagram/fixtures/profile_root_missing.json": {
+      "sha256": "764c79178c732a2d180ad3563592da23c1c0d3e6b802ead4e2506e87d5fc8ac2",
+      "bytes": 33
+    },
+    "PerfilLab/instagram/fixtures/profile_root_nike.json": {
+      "sha256": "2a66c71f8b28c8a50aefb50e20c01c06672376e1bad3684fc2c58730e49799de",
+      "bytes": 2554
+    },
+    "PerfilLab/instagram/fixtures/reels_tab_nike.json": {
+      "sha256": "93473067fac24c3b424f840a181676ccf25a71d0d42eed26db869ae9c789aac1",
+      "bytes": 3831
+    },
+    "PerfilLab/instagram/fixtures/web_posts_instagram.json": {
+      "sha256": "02c181fb67b05f2fa8162c4ec50551f62fdfbf58ba42bacb561336654933f04f",
+      "bytes": 72551
+    },
+    "PerfilLab/instagram/media_download.py": {
+      "sha256": "fa85df8e008b1ab71540f285419954fd890e3a3241c825461e94f93220d957b3",
+      "bytes": 6393
+    },
+    "PerfilLab/instagram/parsers.py": {
+      "sha256": "ab99fd32caa42327f24455334c8b848ddee1216367090e4ce656cde1b165f18b",
+      "bytes": 32908
+    },
+    "PerfilLab/instagram/refs.py": {
+      "sha256": "2ade5c22266d8d5c738732dd7cf7d53282a1126519ef3161376f7d4b8bd25abf",
+      "bytes": 9067
+    },
+    "PerfilLab/instagram/test_parsers.py": {
+      "sha256": "034eb1496493bf232a8bc95737dc9854cfdbf587765dd65302fc33e60e62b62a",
+      "bytes": 21042
+    },
+    "PerfilLab/LICENSE": {
+      "sha256": "7caaf660b4e720b0427dfbbc41263209de86687feb0fa9eb7bda7b32fde17611",
+      "bytes": 1068
+    },
+    "PerfilLab/main.py": {
+      "sha256": "6060daeedba63ac3b8ee042484bd341985b0ac55a4bc6b3fbfd0cec08d8ae1fe",
+      "bytes": 11936
+    },
+    "PerfilLab/output/benford_scan_jhonatan.coronel.csv": {
+      "sha256": "58072ae32f717c4bd5083bbb0fb6829b48cb28419fc9c3c07048af729cf0223d",
+      "bytes": 66625
+    },
+    "PerfilLab/output/benford_scan_jhonatan.coronel.json": {
+      "sha256": "1856eb26d3de554f62fdbd21fe70ab9170740dbb9f64d0412c5a060d985006c4",
+      "bytes": 552521
+    },
+    "PerfilLab/output/instagram_report_jhonatan.coronel.json": {
+      "sha256": "01425c3ff6864770ff5e27a771ec5c831a744f2e6c6755039237521003de7275",
+      "bytes": 20338
+    },
+    "PerfilLab/output/instagram_report_jhonatan.coronel_gemini.json": {
+      "sha256": "a0ed78080a61d8e2d9fdec03cf3ec092d74ddcdc245833cf00dc61fd9e034007",
+      "bytes": 18063
+    },
+    "PerfilLab/output/live_check_20261027_210954/summary.json": {
+      "sha256": "f6a491d3184b352184c46a5dab32aedb0482cc926163a24247437af447bb79f0",
+      "bytes": 206
+    },
+    "PerfilLab/output/live_check_20261027_211159/benford_scan_jhonatan.coronel.csv": {
+      "sha256": "6c594a9438216b432304482143aec32997163ac937407e1576cb3dc08b882a08",
+      "bytes": 534
+    },
+    "PerfilLab/output/live_check_20261027_211159/benford_scan_jhonatan.coronel.json": {
+      "sha256": "0bccdf7cba91505c208cc97addb96e6ba1a838225006197c7e830c37e874e6e8",
+      "bytes": 7963
+    },
+    "PerfilLab/output/live_check_20261027_211159/instagram_report_jhonatan.coronel.json": {
+      "sha256": "c29e2e363dd6f889ec56c1f97a62b14bb7cea9e3acadb8bb680f97ea9b409a41",
+      "bytes": 4650
+    },
+    "PerfilLab/output/live_check_20261027_211159/media/jhonatan.coronel/reels/1844043293416358458_video.mp4": {
+      "sha256": "80242692dd5a312a7d917f051d4f98a63c2d445666c4dfa418512177b4f393ab",
+      "bytes": 386923
+    },
+    "PerfilLab/output/live_check_20261027_211159/summary.json": {
+      "sha256": "9513e8b3c280ce9c79f73aa2fee4f52aab677f5bc0481ecb8369815815ca6103",
+      "bytes": 1268
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/1809884376847585126_image.jpg": {
+      "sha256": "31463197de149396c52cb5ea4e2657ca797daf5d9015b4cee32d631fb0254e33",
+      "bytes": 34797
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/1813592446056377976_image.jpg": {
+      "sha256": "72c1d8c14046b6840a5f92faedc066d74bb126ddddb94e2867001edac012a6c2",
+      "bytes": 85837
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/1844043293416358458_video.mp4": {
+      "sha256": "80242692dd5a312a7d917f051d4f98a63c2d445666c4dfa418512177b4f393ab",
+      "bytes": 386923
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2338920739312642333_image.jpg": {
+      "sha256": "57dc47df7c96f4d4ef555c45a042267d9447f70f49b6b31dc25542d5f7e1c03e",
+      "bytes": 129840
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2341180516625297037_image.jpg": {
+      "sha256": "ceda557f3332bd91334c8aaf154b0de0cfd439cb6f14a50d54870023bed68605",
+      "bytes": 94360
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2361513432106493075_image.jpg": {
+      "sha256": "3da2fa84223220b063edb4c78c4c81dfa8665974e8a9822f213ac7c90a1c05e1",
+      "bytes": 178952
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2391794180163982651_image.jpg": {
+      "sha256": "65d3a125bcb019f9621afc962a3dfac9db4ac6b57120ceab7e79fac978eaf9ec",
+      "bytes": 171478
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2538991739776482730_image.jpg": {
+      "sha256": "f91487630116604c424a60b82cd300d5b000bcc373b4009ea07a11114a1e00a2",
+      "bytes": 79006
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2560450208329101853_image.jpg": {
+      "sha256": "1e244b3903c3a262add0d341e04bb646a9a0e408771d0a7992b6c14737522fb7",
+      "bytes": 63166
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2686205049984955628_image.jpg": {
+      "sha256": "ab2472661714f7bd839c55a75da19c0ee8a9ffb229a6c97fe41291e186ad7965",
+      "bytes": 163346
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2881862970260279562_image.jpg": {
+      "sha256": "7b7da8d329a5feb130ebd1c3a87be6a0f7c96d88fe912365831cde9b740b5b36",
+      "bytes": 136395
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2890193132219667118_image.jpg": {
+      "sha256": "462a09536ae633cdf4b91d5c79be1d57c254bb585bc2031b50698623ad3a19cc",
+      "bytes": 60419
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/2964297656827704270_image.jpg": {
+      "sha256": "a5874d1e1ff15a81a24f7cec450fb6e2265585b73a44302740d81bac17c46752",
+      "bytes": 91871
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008106703068836485_image.jpg": {
+      "sha256": "70bd0f3d78119a36f831b75dd76b5dfed7a7a24208b33d084eeb7ea0727439f2",
+      "bytes": 1126449
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008107158318600173_image.jpg": {
+      "sha256": "489950f1e53ba97395947f7a3d65e2521bbff633cc67aedafc81d5318043d8ed",
+      "bytes": 136032
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008107375541549460_image.jpg": {
+      "sha256": "90619de0d0e65c200f3e642a2c8861572303e06ba94245f454b8dca8a4e718df",
+      "bytes": 957126
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_01_image.jpg": {
+      "sha256": "0a5169fa48ba4bb2bf7268e490d42c528c156bd8cafda58a8c60a638d46f995f",
+      "bytes": 121846
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_02_video.mp4": {
+      "sha256": "5f4ae317ff89dc2d9e532f102c035d244c2b73672c605a0ea7946a138a545a5a",
+      "bytes": 433939
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_03_image.jpg": {
+      "sha256": "e54d9eb73c323a0316733f850330227286016c52238bd8f51f006f728f5ba603",
+      "bytes": 151740
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_04_image.jpg": {
+      "sha256": "9380f216664e0202fa2da04d280ca1066597771a93170f8879ea053833598166",
+      "bytes": 711630
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_05_image.jpg": {
+      "sha256": "2f921b1ff53d8e0e29d034f8575f74d4526b1cf96e3debe75f777439e1e447e2",
+      "bytes": 916476
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_06_image.jpg": {
+      "sha256": "7c8e9982855e68cba19644a191b16116a17576a4f8bb3a8298eae55b3062e090",
+      "bytes": 138208
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_07_image.jpg": {
+      "sha256": "e740ba4119076db08bf56b4a52a221816ebb4f5ee9bfb2a9152ea1ba68606264",
+      "bytes": 218755
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_08_image.jpg": {
+      "sha256": "1137d8aba582ef4fa721dc494c850593438076b6ed2e93c4871799aa784162e4",
+      "bytes": 402764
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_09_image.jpg": {
+      "sha256": "dad32378c1b1f5cff19b01eaba5e04e35aea74e1942c0e5db905e2d99153fc79",
+      "bytes": 289281
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008108654776384686_slide_10_image.jpg": {
+      "sha256": "f52c2dba78430ed3a90ccb3e932e0129fca4bd468e4cc15cde3d291f21639211",
+      "bytes": 241052
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008109144648705333_image.jpg": {
+      "sha256": "420e11834e97ee5d0129c4240754b5fccae920ea20e1943aca244e3a001e2b9a",
+      "bytes": 119257
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008109484034788335_image.jpg": {
+      "sha256": "b28c6c807064ad9cfe7d00a555052a54711ba4a8d361c26bb242ca53ee7af328",
+      "bytes": 1701095
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008109677056673751_image.jpg": {
+      "sha256": "6ad752a64e6eca5f8a86481a10d00555d352534662c4d9be5741b5d17854e24c",
+      "bytes": 172162
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008109944745655802_image.jpg": {
+      "sha256": "6a838bf07929936781a6fb4b214739cfd942e27a084c198c71dec50f893e3c4f",
+      "bytes": 1045001
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008110226124769469_image.jpg": {
+      "sha256": "bc0062d7bb34cd818e96709efa34fcff2f6332866c922d0a5ee54b29308b0699",
+      "bytes": 274511
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008110555947974136_image.jpg": {
+      "sha256": "e6d743fdffc832c21c3b9a74425284c83bf79c7d909bfd9ae04cc012128d9f23",
+      "bytes": 161070
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008111246925937165_image.jpg": {
+      "sha256": "58a2ce0a1f9bbebd8767ccebdb00e71e7d0ff5236430b21c221da3666cf20a3f",
+      "bytes": 226070
+    },
+    "PerfilLab/output/media/jhonatan.coronel/posts/4008111629689790844_image.jpg": {
+      "sha256": "6217357b1b7bbae267dff74e4d6ccc542e690fa123813fbe1308c7a2c598eea3",
+      "bytes": 445184
+    },
+    "PerfilLab/output/pdf/PerfilLab_Entrega_Gemini_y_pruebas.pdf": {
+      "sha256": "90122ee1aaa6b7ed85550205239af84e564c9994b7fcc824312afe5a15aeec3e",
+      "bytes": 51998
+    },
+    "PerfilLab/output/qa/benford_demo.png": {
+      "sha256": "600b7770ea6931eff82993c428dcbb71c13431de40568ecd0740eb320f1deba4",
+      "bytes": 52771
+    },
+    "PerfilLab/output/qa/gemini-tests.xml": {
+      "sha256": "0de52ff1bd3e8f91c191e3c60aca7f97a781798bd904cbe09826d4b3b678e196",
+      "bytes": 16639
+    },
+    "PerfilLab/output/qa/gemini_sin_clave.png": {
+      "sha256": "51cbb12778761da7b005995a9964b323bdeb5f91e2c39300ec3ea5457662a0da",
+      "bytes": 123045
+    },
+    "PerfilLab/output/qa/interfaz_benford.png": {
+      "sha256": "4b2cfbc6a2b064c5fe97ff2a5e34c10ed89c9dcb0ee2e89427ae3f9645a0ae9d",
+      "bytes": 164224
+    },
+    "PerfilLab/output/qa/interfaz_bigfive.png": {
+      "sha256": "2288c2224ca5ba31c6cd2b59d759293f37cf014cfe41e58cd2d20c9173721b37",
+      "bytes": 188306
+    },
+    "PerfilLab/output/qa/interfaz_graficos.png": {
+      "sha256": "0b439bb22b4b1ec1cb682c81a33b96ad9c50f7514aa65874bf2c81d9fc5c9fa0",
+      "bytes": 179088
+    },
+    "PerfilLab/output/qa/interfaz_tooltip.png": {
+      "sha256": "c9bc61ff947caf69c807a73a4912059c3f61a9cca5570ff4d96a566f87c0da5e",
+      "bytes": 172798
+    },
+    "PerfilLab/output/qa/live-fix-tests.xml": {
+      "sha256": "e74696ad1f2daa3b64c6687b9a4185510ffe09b8b82f57672d01aa4359e6aa3a",
+      "bytes": 14281
+    },
+    "PerfilLab/output/qa/test-results.xml": {
+      "sha256": "0ed585f9155b3e920f4f440fc34ea3006f1ba80fd2eb1b67bff5b40236f52630",
+      "bytes": 14152
+    },
+    "PerfilLab/README.md": {
+      "sha256": "58d73ade55bb4bfec913e8f1becc20ea12641d6b46d30d19cf27ba7aefe697c1",
+      "bytes": 7091
+    },
+    "PerfilLab/requirements-dev.txt": {
+      "sha256": "8636f9ab1a075be9f3039e2a6471837259c4f36b625bcaf7a3d9a1edd2419c6d",
+      "bytes": 34
+    },
+    "PerfilLab/requirements-report.txt": {
+      "sha256": "83377d7fda7bd3a3b02e5058c59834afea27ca465e9ba11d7e86c00796be59d2",
+      "bytes": 92
+    },
+    "PerfilLab/requirements.txt": {
+      "sha256": "423fefd0f2a38976ff77f4f249d8c1bffc0c0e8504dba92ba47c94c0eee773d2",
+      "bytes": 82
+    },
+    "PerfilLab/run.py": {
+      "sha256": "cd69107d228bf219e9bedfdfb6be53614445b328d36398a5b62b7d80d41e906d",
+      "bytes": 137
+    },
+    "PerfilLab/SECURITY.md": {
+      "sha256": "339769381a0a2814680c9d8deb3994e98ff96ecb5c9dca0700e561db39b550de",
+      "bytes": 1472
+    },
+    "PerfilLab/tests/conftest.py": {
+      "sha256": "4479eead3c0cbe9a4e50bef058ed2cc578a854663b9c89af0de63e00e724d714",
+      "bytes": 265
+    },
+    "PerfilLab/tests/test_benford_assessment.py": {
+      "sha256": "a2392a878db636ec408146014bd6d8b80b1f4513ae0f8dbcaaef760637222946",
+      "bytes": 2534
+    },
+    "PerfilLab/tests/test_browser_integration.py": {
+      "sha256": "06e2472a332e2ac8b6491903404486e751be7bfe8934cd9aec0d006ba667a821",
+      "bytes": 6741
+    },
+    "PerfilLab/tests/test_gemini.py": {
+      "sha256": "bb48780ef61e770b9ceed811256ffe29141f6082bec8b203b9688673bc352de4",
+      "bytes": 5684
+    },
+    "PerfilLab/tests/test_gui.py": {
+      "sha256": "7ebbb0463306f8ff03aea778d248ed35f436696b2db345ad8f505633d95b6548",
+      "bytes": 2715
+    },
+    "PerfilLab/tests/test_runtime.py": {
+      "sha256": "aa9c3fafea20eb4c7078718a73d6eb0d84e39bceb9e0e37e67e314aba3234bb8",
+      "bytes": 9859
+    },
+    "PerfilLab/tools/build_delivery_report.py": {
+      "sha256": "ea93bd22957f44769dc5d273d840a59a88c78704f83a4b7456698884f9aaeca9",
+      "bytes": 12088
+    }
+  },
+  "gemini_live_test": "pending_missing_api_key",
+  "automated_tests_passed": 150
+}

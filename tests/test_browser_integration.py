@@ -70,8 +70,10 @@ def routed_factory(monkeypatch, tmp_path):
 
 
 def test_real_browser_profile_posts_reels_and_local_big_five(routed_factory):
+    from big_five import analyze_texts
     factory, _, requests = routed_factory
-    report, path = main.run_export('demo', client_factory=factory)
+    report, path = main.run_export('demo', client_factory=factory,
+        analyzer=lambda p,c: {'provider': 'local_lexicon_v1', 'result': analyze_texts(p,c)})
     assert path.is_file() and report['status'] == 'complete'
     assert report['content']['count'] == 2
     assert report['profile']['biography'].startswith('arte creativo')
@@ -87,6 +89,24 @@ def test_real_browser_relationship_dialogs_and_metrics(routed_factory):
     assert result['followers'][0]['follower_count'] == 123
     assert result['following'][0]['following_count'] == 234
     assert requests.count('/alice/') == 1
+
+
+def test_current_instagram_javascript_json_and_hash_links(routed_factory):
+    factory, responses, _ = routed_factory
+    payload = json.dumps({'user': profile('demo', 416, 242, 25)})
+    responses['/demo/'] = (200, '<html><body><header><a href="#">416 followers</a><a href="#">242 following</a></header><script>setTimeout(()=>fetch("/current-profile"),150)</script></body></html>')
+    class CurrentBrowser(factory):
+        def __enter__(self):
+            super().__enter__()
+            self.context.route('**/current-profile', lambda route: route.fulfill(
+                status=200, body=payload, content_type='text/javascript; charset=utf-8'))
+            return self
+    with CurrentBrowser() as session:
+        result = session.get_profile({'username': 'demo'})
+        assert result['follower_count'] == 416
+        assert result['post_count'] == 25
+        assert session._relationship_link('followers').inner_text() == '416 followers'
+        assert session._relationship_link('following').inner_text() == '242 following'
 
 
 def test_real_browser_429_stops_and_reports_failed(routed_factory):

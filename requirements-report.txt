@@ -1,0 +1,2 @@
+# Optional: regenerate the delivery PDF on Windows with Segoe UI installed.
+reportlab>=4,<5

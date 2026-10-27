@@ -44,5 +44,15 @@ def test_gui_tables_tooltips_two_datasets_and_three_charts():
         app._analyze_benford()
         assert 'muestra incompleta' in app.benford_verdict.get()
         assert 'se rechaza' not in app.benford_summary.get()
+        from tests.test_gemini import answer
+        gemini_report = {'personality_analysis': {'provider': 'gemini', 'model': 'synthetic-model',
+            'status': 'complete', 'result': answer()}}
+        app._show_result(gemini_report, 'synthetic.json')
+        assert 'estimación 60/100' in app.summary.get('1.0', 'end')
+        assert 'Me gusta aprender' in app.summary.get('1.0', 'end')
+        gemini_report['personality_analysis'].update(result=None, status='not_configured', error='Configura GEMINI_API_KEY')
+        app._show_result(gemini_report, 'synthetic.json')
+        assert 'Configura GEMINI_API_KEY' in app.summary.get('1.0', 'end')
+        assert 'incidencias' in app.status.get()
     finally:
         root.destroy()

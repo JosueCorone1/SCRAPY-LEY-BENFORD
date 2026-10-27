@@ -1,4 +1,4 @@
-"""Local settings loaded from environment variables and an optional .env file."""
+"""Instagram cookie settings and Gemini configuration (secrets stay local)."""
 import math
 import os
 from pathlib import Path
@@ -37,11 +37,11 @@ def instagram_cookies():
 
 
 def gemini_api_key():
-    return os.environ.get('GEMINI_API_KEY', '').strip() or None
+    return (os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY') or '').strip()
 
 
 def gemini_model():
-    return os.environ.get('GEMINI_MODEL', 'gemini-3.8-flash').strip() or 'gemini-3.8-flash'
+    return os.environ.get('GEMINI_MODEL', 'gemini-flash-latest').strip() or 'gemini-flash-latest'
 
 
 def playwright_headless():

@@ -154,7 +154,8 @@ def output(tmp_path, monkeypatch):
 
 def test_export_deduplicates_and_analyzes_locally(output):
     fake = FakeBrowser()
-    report, path = main.run_export('demo', client_factory=lambda **kwargs: fake)
+    report, path = main.run_export('demo', client_factory=lambda **kwargs: fake,
+        analyzer=lambda p,c: {'provider': 'local_lexicon_v1', 'result': big_five.analyze_texts(p,c)})
     assert report['content']['count'] == 1
     assert report['content']['items'][0]['metrics']['views'] == 0
     assert report['status'] == 'complete'

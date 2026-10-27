@@ -18,6 +18,5 @@ def examples():
                'biography': 'arte creativo aprender rutina ' * 30, 'counts': {'followers': 1000, 'following': 1000}}
     report = {'target': 'DEMOSTRACION_SINTETICA', 'status': 'demo', 'profile': profile,
               'content': {'items': [], 'requested_limit': None, 'collection': {}},
-              'personality_analysis': {'status': 'demo', 'provider': 'demo_synthetic',
-                                       'result': analyze_texts(profile, [])}}
+              'personality_analysis': {'status': 'local_exploratory', 'result': analyze_texts(profile, [])}}
     return report, scan
