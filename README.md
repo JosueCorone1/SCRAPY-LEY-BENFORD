@@ -95,6 +95,5 @@ Las pruebas automatizadas de Chromium interceptan el tráfico y usan fixtures si
 - `benford.py`: cálculos y reglas de calidad.
 - `tests/`: pruebas locales y de integración simulada.
 
-El ZIP no contiene `.env`, `.auth`, claves ni entornos Python. Sí contiene los resultados y medios reales solicitados para la entrega. No incluye los ZIP antiguos.
 
 Referencias: https://googleapis.github.io/python-genai/ ; https://playwright.dev/python/docs/auth ; https://itl.nist.gov/div898/handbook/eda/section3/eda35f.htm
