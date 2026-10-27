@@ -1,0 +1,13 @@
+services:
+  instagram-scraper:
+    build: .
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./output:/app/output
+      - ./.auth:/app/.auth
+    environment:
+      - INSTAGRAM_COOKIES=${INSTAGRAM_COOKIES:-}
+      - PLAYWRIGHT_HEADLESS=true
+      - INSTAGRAM_REQUEST_INTERVAL_SECONDS=${INSTAGRAM_REQUEST_INTERVAL_SECONDS:-2}
+      - INSTAGRAM_RATE_LIMIT_COOLDOWN_SECONDS=${INSTAGRAM_RATE_LIMIT_COOLDOWN_SECONDS:-900}
