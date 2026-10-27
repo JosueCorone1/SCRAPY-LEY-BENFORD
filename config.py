@@ -1,4 +1,4 @@
-"""Local settings. No API keys or external inference services are used."""
+"""Local settings loaded from environment variables and an optional .env file."""
 import math
 import os
 from pathlib import Path
@@ -34,6 +34,14 @@ INSTAGRAM_RATE_LIMIT_COOLDOWN_SECONDS = _seconds_setting('INSTAGRAM_RATE_LIMIT_C
 
 def instagram_cookies():
     return os.environ.get('INSTAGRAM_COOKIES', '').strip() or None
+
+
+def gemini_api_key():
+    return os.environ.get('GEMINI_API_KEY', '').strip() or None
+
+
+def gemini_model():
+    return os.environ.get('GEMINI_MODEL', 'gemini-3.8-flash').strip() or 'gemini-3.8-flash'
 
 
 def playwright_headless():

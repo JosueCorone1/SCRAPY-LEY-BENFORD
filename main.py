@@ -1,4 +1,4 @@
-"""Application workflows: Playwright + session cookies, local analysis and files."""
+"""Application workflows: Playwright + session cookies, Gemini analysis and files."""
 import argparse
 import csv
 import json
@@ -7,7 +7,8 @@ import time
 from pathlib import Path
 
 import benford
-from big_five import analyze_texts
+from config import gemini_api_key, gemini_model
+from gemini_client import analyze_texts, GeminiError
 from instagram import refs
 from instagram.browser import InstagramBrowser, CollectionCancelled, login_session
 from instagram.errors import InstagramBlocked, InstagramGated
@@ -68,7 +69,9 @@ def save_report(username, report):
 
 
 def run_export(raw_username, limit=None, *, progress=None, cancel=None, client_factory=None):
-    """Collect profile + visible content; analyze text locally, with no API keys."""
+    """Collect profile/content and analyze text with the configured Gemini API."""
+    if not gemini_api_key():
+        raise GeminiError('Falta GEMINI_API_KEY. Agrégala al archivo .env y reinicia la aplicación.')
     user = _target(raw_username)
     limit = _limit(limit)
     factory = client_factory or InstagramBrowser
@@ -97,8 +100,13 @@ def run_export(raw_username, limit=None, *, progress=None, cancel=None, client_f
         download_content(user['username'], content, OUTPUT_DIR, cancel=cancel)
     for item in content:
         item.pop('_media', None)
-    _progress(progress, 'Calculando indicadores Big Five localmente...')
-    analysis = analyze_texts(profile, content)
+    _progress(progress, 'Analizando textos con Gemini API...')
+    analysis_error = None
+    try:
+        analysis = analyze_texts(profile, content)
+    except GeminiError as exc:
+        analysis = None
+        analysis_error = str(exc)
     truncated = limit is not None and len(all_content) > limit
     complete = posts.get('complete') and reels.get('complete') and not truncated
     status = 'complete' if complete else 'partial' if content else 'failed'
@@ -115,8 +123,11 @@ def run_export(raw_username, limit=None, *, progress=None, cancel=None, client_f
         },
         'content': {'requested_limit': limit, 'count': len(content), 'items': content,
                     'collection': {'posts': _metadata(posts), 'reels': _metadata(reels)}},
-        'personality_analysis': {'status': 'local_exploratory', 'provider': 'local_lexicon_v1',
-                                 'source_collection_status': status, 'result': analysis},
+        'personality_analysis': {
+            'status': 'completed' if analysis is not None else 'failed',
+            'provider': 'gemini_api', 'model': (analysis or {}).get('model') or gemini_model(),
+            'source_collection_status': status, 'result': analysis, 'error': analysis_error,
+        },
     }
     path = save_report(user['username'], report)
     _progress(progress, f'Contenido: {len(content)} elementos; estado {status}. Informe: {path}')
@@ -196,18 +207,26 @@ def reanalyze_saved_report(raw_username):
     user = _target(raw_username)
     path = OUTPUT_DIR / f'instagram_report_{user["username"]}.json'
     report = json.loads(path.read_text(encoding='utf-8'))
-    report['personality_analysis'] = {'status': 'local_exploratory', 'provider': 'local_lexicon_v1',
-                                     'result': analyze_texts(report.get('profile') or {}, (report.get('content') or {}).get('items') or [])}
+    try:
+        analysis = analyze_texts(report.get('profile') or {}, (report.get('content') or {}).get('items') or [])
+        error = None
+    except GeminiError as exc:
+        analysis = None
+        error = str(exc)
+    report['personality_analysis'] = {
+        'status': 'completed' if analysis is not None else 'failed', 'provider': 'gemini_api',
+        'model': (analysis or {}).get('model') or gemini_model(), 'result': analysis, 'error': error,
+    }
     return save_report(user['username'], report)
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Instagram con Playwright y cookies; análisis local sin APIs.')
+    parser = argparse.ArgumentParser(description='Instagram con Playwright y cookies; análisis Big Five con Gemini API.')
     parser.add_argument('username', nargs='?', help='handle del perfil')
     parser.add_argument('--mode', choices=['bigfive', 'benford'], default='bigfive')
     parser.add_argument('--limit', type=int, help='máximo de contenidos o cuentas por lista; omitir para todo lo disponible')
     parser.add_argument('--login', action='store_true', help='guardar una sesión iniciada manualmente en el navegador')
-    parser.add_argument('--reanalyze', metavar='HANDLE', help='recalcular Big Five localmente con un informe guardado')
+    parser.add_argument('--reanalyze', metavar='HANDLE', help='recalcular Big Five con Gemini usando un informe guardado')
     args = parser.parse_args()
     if args.login:
         login_session(progress=print)

@@ -215,12 +215,12 @@ class ExporterWindow:
         )
         self.json_view.pack(fill="both", expand=True)
         self._set_text(self.summary,
-            "BIG FIVE · INDICADORES LOCALES\n\n"
+            "BIG FIVE · ANÁLISIS CON GEMINI\n\n"
             "1. Inicia sesión o configura tus cookies.\n"
             "2. Escribe el perfil y pulsa Recopilar y analizar.\n"
-            "3. Revisa la biografía, los textos y la evidencia de cada dimensión.\n\n"
-            "El índice cuenta palabras asociadas a cada polo; no es una evaluación psicológica validada. "
-            "Si falta evidencia, se muestra sin puntuación. No se envían textos a servicios de IA."
+            "3. Revisa la estimación textual, la confianza y las observaciones de cada dimensión.\n\n"
+            "Configura GEMINI_API_KEY en .env. Se envían a Google la biografía y los textos de publicaciones y reels; "
+            "las puntuaciones son exploratorias y no constituyen una evaluación psicológica validada."
         )
 
     def _build_benford_page(self):
@@ -514,6 +514,10 @@ class ExporterWindow:
             for file_path in (item.get("media_downloads") or {}).get("files", [])
         ]
         analysis = report.get("personality_analysis") or {}
+        analysis_method = (
+            "demostración sintética local" if analysis.get("provider") == "demo_synthetic"
+            else f"Gemini API ({analysis.get('model') or 'modelo no disponible'})"
+        )
 
         lines = [
             f"Perfil: @{profile.get('username') or report.get('target', '')}",
@@ -523,7 +527,7 @@ class ExporterWindow:
             f"Contenidos en el informe: {len(items)}; límite: {content.get('requested_limit') or 'todo lo disponible'}",
             f"Estado de recopilación: {report.get('status', 'no disponible')}",
             f"Archivos multimedia descargados: {len(media_paths)}",
-            f"Método Big Five: análisis léxico local (sin API)",
+            f"Método Big Five: {analysis_method}",
             f"Informe: {path}",
         ]
         collection = content.get("collection") or {}
@@ -535,16 +539,21 @@ class ExporterWindow:
                 lines.append(f"{label}: {details['error']}")
         result = analysis.get("result") or {}
         if result:
-            lines.append("\nÍNDICES LÉXICOS BIG FIVE · EXPLORATORIOS")
+            heading = "DEMOSTRACIÓN SINTÉTICA BIG FIVE" if analysis.get("provider") == "demo_synthetic" else "ANÁLISIS BIG FIVE CON GEMINI · ESTIMACIÓN TEXTUAL"
+            lines.append("\n" + heading)
+            if result.get("summary"):
+                lines.append(result["summary"])
+            if result.get("input_truncated"):
+                lines.append("Aviso: se omitió parte del texto por el límite de tamaño de Gemini.")
             for key, label in TRAITS:
                 entry = result.get(key) or {}
                 score = entry.get("score")
-                score_text = f"índice léxico {score}/100" if score is not None else "evidencia insuficiente"
+                score_text = f"estimación textual {score}/100" if score is not None else "evidencia insuficiente"
                 justification = entry.get("justificacion") or ""
-                lines.append(f"• {label}: {score_text}. {justification}")
-                evidence = entry.get("evidence") or {}
-                terms = list((evidence.get("positive") or {})) + list((evidence.get("opposite") or {}))
-                lines.append("  Términos encontrados: " + (", ".join(terms) or "ninguno"))
+                lines.append(f"• {label}: {score_text} (confianza {entry.get('confidence', 'baja')}). {justification}")
+                observations = entry.get("observations") or []
+                if observations:
+                    lines.append("  Observaciones: " + " · ".join(observations))
             if result.get("limitaciones"):
                 lines.append(f"Limitaciones: {result['limitaciones']}")
         elif analysis.get("error"):
@@ -552,10 +561,13 @@ class ExporterWindow:
 
         self._set_text(self.summary, "\n".join(lines))
         self._set_text(self.json_view, json.dumps(report, ensure_ascii=False, indent=2))
-        self.status.set(
-            "Recopilación interrumpida; consulta el detalle en el resumen."
-            if interrupted else f"Proceso terminado. Estado: {report.get('status', 'desconocido')}."
-        )
+        if analysis.get("status") == "failed":
+            self.status.set("Recopilación guardada; el análisis Gemini no se completó. Consulta el resumen.")
+        else:
+            self.status.set(
+                "Recopilación interrumpida; consulta el detalle en el resumen."
+                if interrupted else f"Proceso terminado. Estado: {report.get('status', 'desconocido')}."
+            )
         self._set_busy(False)
         self.open_button.configure(state="normal")
         self.mode_notebook.select(self.personality_page)

@@ -1,8 +1,8 @@
 # PerfilLab: Instagram con Playwright y cookies
 
-Aplicación de escritorio en Python para recopilar los datos visibles de un perfil autorizado y realizar dos análisis locales: indicadores léxicos Big Five y ajuste a la Ley de Benford.
+Aplicación de escritorio en Python para recopilar los datos visibles de un perfil autorizado, analizar textos con Gemini API para Big Five y calcular el ajuste a la Ley de Benford localmente.
 
-**No utiliza Gemini, API oficial de Meta ni claves API.** Playwright abre Chromium con cookies de sesión, navega por las páginas y lee el DOM y los datos que esas páginas reciben. No reproduce llamadas programadas a endpoints internos. El navegador sí hace las solicitudes normales del sitio. Los archivos multimedia se descargan desde las URL de CDN recibidas, sin enviarles las cookies de Instagram.
+Playwright abre Chromium con cookies de sesión, navega por las páginas y lee el DOM y los datos que esas páginas reciben. No reproduce llamadas programadas a endpoints internos. El navegador sí hace las solicitudes normales del sitio. Los archivos multimedia se descargan desde las URL de CDN recibidas, sin enviarles las cookies de Instagram.
 
 ## Instalación en Windows
 
@@ -34,11 +34,11 @@ La sesión guardada en `.auth/instagram.json` tiene prioridad sobre `.env`. Para
 1. Escribe el @handle y selecciona **Todo lo disponible**, o desmarca la opción para introducir un límite.
 2. Pulsa **Recopilar y analizar**. Se lee la biografía, se recorren las páginas de publicaciones y reels, y se abren los contenidos encontrados para obtener descripciones y medios disponibles.
 3. Los contenidos se deduplican por código; los recomendados de otros autores se excluyen del análisis. El límite se aplica al informe combinado; cada pestaña puede recorrerse hasta ese límite para poder unirlas.
-4. Se descargan los medios disponibles y se ejecuta `big_five.py` localmente. El resumen muestra evidencia y el JSON conserva los datos y el método.
+4. Se descargan los medios disponibles y Gemini analiza la biografía y los textos de las publicaciones/reels. No se envían imágenes, videos, cookies, nombres de usuario, menciones ni enlaces a la API. La respuesta se guarda en el informe JSON junto al modelo empleado.
 
-**Método Big Five:** diccionarios propios de palabras en español e inglés, separados en dos polos por dimensión. El índice es `100 * coincidencias_positivas / coincidencias_totales`. Solo se muestra con al menos 100 palabras de entrada, 5 coincidencias y 3 términos distintos para ese rasgo. En caso contrario se devuelve `null` (evidencia insuficiente). Las URL, menciones y hashtags se excluyen.
+La aplicación requiere `GEMINI_API_KEY` en `.env`. Sin la clave no empieza la recopilación Big Five. Si falla la solicitud, el informe de extracción se conserva y marca el análisis como fallido; no se sustituye silenciosamente por el método local.
 
-**Este índice no es una prueba psicológica ni un modelo de personalidad validado.** Describe coincidencias léxicas. No entiende negaciones, ironía, contexto o citas. No se debe inferir personalidad real o salud mental ni usarlo para decisiones sobre personas. La dimensión denominada neuroticismo no es un diagnóstico. El diccionario es visible y auditable en `big_five.py`.
+Gemini devuelve una estimación textual exploratoria por dimensión, confianza y observaciones. **No es una prueba psicológica ni mide la personalidad real.** Las publicaciones pueden estar seleccionadas, ser irónicas o hablar de otras personas. No debe usarse para inferir salud mental ni tomar decisiones sobre personas. Neuroticismo no es un diagnóstico. Solo se envían a Google la biografía y captions; no incluyas contenido que no tengas autorización para procesar. La aplicación limita el texto enviado a 60.000 caracteres y cada caption a 3.000 caracteres.
 
 ## Opción 2: Ley de Benford
 
@@ -89,12 +89,16 @@ Ante `429`, se detienen las nuevas solicitudes. Se respeta `Retry-After` o, si f
 | `INSTAGRAM_RATE_LIMIT_COOLDOWN_SECONDS` | 900 | Espera si 429 no trae Retry-After |
 | `PLAYWRIGHT_HEADLESS` | false | true ejecuta las extracciones sin mostrar Chromium |
 | `PLAYWRIGHT_MAX_SCROLLS` | 300 | Máximo de desplazamientos por lista/pestaña |
+| `GEMINI_API_KEY` | vacío | Clave de Gemini API necesaria para Big Five |
+| `GEMINI_MODEL` | `gemini-3.8-flash` | Modelo Gemini para el análisis de texto |
+
+Obtén una clave en [Google AI Studio](https://aistudio.google.com/app/apikey), pégala como valor de `GEMINI_API_KEY` en `.env` y reinicia la app. Conserva esa clave en privado; `.env` está excluido de Git.
 
 El navegador carga varios recursos por página; la pausa entre acciones no equivale a un límite exacto de solicitudes HTTP.
 
 ## Archivos generados
 
-- `output/instagram_report_<usuario>.json`: perfil, contenidos, estado y análisis Big Five local.
+- `output/instagram_report_<usuario>.json`: perfil, contenidos, estado y análisis Big Five de Gemini.
 - `output/media/<usuario>/`: medios que el sitio proporcionó y se pudieron descargar.
 - `output/benford_scan_<usuario>.csv` y `.json`: relaciones, conteos, errores y estadísticas de los dos conjuntos.
 
@@ -109,7 +113,7 @@ Repetir una extracción para el mismo usuario actualiza sus archivos de salida. 
 .\.venv\Scripts\python.exe main.py --reanalyze usuario
 ```
 
-Omitir `--limit` solicita todo lo disponible. `--reanalyze` recalcula Big Five con el JSON guardado sin volver a consultar Instagram.
+Omitir `--limit` solicita todo lo disponible. `--reanalyze` recalcula Big Five con Gemini usando el JSON guardado sin volver a consultar Instagram.
 
 ## Pruebas
 
@@ -127,22 +131,23 @@ $env:RUN_GUI_TESTS = '1'
 .\.venv\Scripts\python.exe -m pytest tests instagram/test_parsers.py -q
 ```
 
-Las pruebas de navegador usan Chromium real, pero interceptan todas las páginas y respuestas con datos sintéticos. No envían tráfico a Instagram. Cubren perfil, publicaciones, reels, listas, conteos y 429. Las demás pruebas cubren parsers, Benford, Big Five local, cookies, cancelación, deduplicación y archivos parciales. La compatibilidad con Instagram real depende de su página actual, la sesión y los límites del servidor; no se considera verificada por estas pruebas.
+Las pruebas de navegador usan Chromium real, pero interceptan todas las páginas y respuestas con datos sintéticos. No envían tráfico a Instagram. Cubren perfil, publicaciones, reels, listas, conteos y 429. Las demás pruebas cubren parsers, Benford, análisis Big Five local heredado, cookies, cancelación, deduplicación y archivos parciales. La compatibilidad con Instagram real depende de su página actual, la sesión y los límites del servidor; no se considera verificada por estas pruebas.
 
 ## Estructura
 
 - `gui.py`: interfaz Tkinter, hilos de trabajo, eventos, tablas, tooltips y gráficos.
-- `main.py`: coordinación, unión de contenidos, análisis local y exportaciones.
+- `main.py`: coordinación, unión de contenidos, análisis Gemini y exportaciones.
 - `instagram/browser.py`: sesión Playwright, navegación, desplazamiento y control de bloqueos.
 - `instagram/browser_data.py`: extracción de los datos que entrega el navegador y conteos exactos.
 - `instagram/parsers.py` y `refs.py`: normalización de datos y referencias.
 - `instagram/errors.py`: tipos de error compartidos.
 - `instagram/media_download.py`: descarga de archivos desde CDN, sin cookies de Instagram.
-- `big_five.py`: diccionarios y método léxico local, con evidencia por dimensión.
+- `big_five.py`: léxico exploratorio legado y limitaciones del Big Five.
+- `gemini_client.py`: petición a Gemini API, límites del texto y validación de la respuesta.
 - `benford.py`: primer dígito, distribución teórica, chi-cuadrado y p-valor.
 - `config.py`: configuración local.
 
-La versión anterior está en el ZIP de respaldo `Scrapy-API-Gemini-corregido.zip` si ya lo generaste; no se incluye dentro del nuevo paquete. Los módulos del extractor HTTP anterior y el cliente Gemini se retiraron de esta versión.
+La recopilación usa Playwright; solo el análisis Big Five envía texto a la API de Gemini.
 
 En el ZIP entregado, `docs/` contiene el informe PDF y `docs/evidencia/` conserva el resultado JUnit y las capturas de la demostración. Estas evidencias usan datos sintéticos.
 
@@ -150,6 +155,7 @@ En el ZIP entregado, `docs/` contiene el informe PDF y `docs/evidencia/` conserv
 
 - [Playwright: autenticación y estado de sesión](https://playwright.dev/python/docs/auth)
 - [Playwright: respuestas de red del navegador](https://playwright.dev/python/docs/network)
+- [Gemini API: generateContent](https://ai.google.dev/api/generate-content)
 - [NIST: Ley de Benford](https://xlinux.nist.gov/dads/HTML/benfordslaw.html)
 - [NIST: prueba de bondad de ajuste chi-cuadrado](https://itl.nist.gov/div898/handbook/eda/section3/eda35f.htm)
 - [MDN: HTTP 429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/429)
