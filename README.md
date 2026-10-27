@@ -1,4 +1,4 @@
-# PerfilLab: Instagram con cookies, Big Five con Gemini y Benford
+# Instagram con cookies, Big Five con Gemini y Benford
 
 Proyecto académico Python con interfaz Tkinter, extracción mediante Playwright y análisis separados.
 
